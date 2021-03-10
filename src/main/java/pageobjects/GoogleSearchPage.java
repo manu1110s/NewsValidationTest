@@ -1,4 +1,4 @@
-package pageObjects;
+package pageobjects;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -27,12 +27,20 @@ public class GoogleSearchPage {
 
     /*This method enters the search string in the search text box of Google . It accepts search string as parameter*/
     public void enterSearchCriteria(String firstArticleHeadline) {
-        textbox_Search.sendKeys(firstArticleHeadline);
+        try {
+            textbox_Search.sendKeys(firstArticleHeadline);
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
     }
 
     /*This method searches for the results on Google search page.*/
     public void searchForResults() {
-        textbox_Search.sendKeys(Keys.ENTER);
+        try {
+            textbox_Search.sendKeys(Keys.ENTER);
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
     }
 
     /*This method fetches all the results from Google search page and returns the results in the form of List of Strings*/
@@ -63,10 +71,10 @@ public class GoogleSearchPage {
             //Assuming headlines consist of at least 5 words and if we find at least 70 percent matching results
             // then we are assuming to say that the news is valid
             requiredMatchingPercentage = (0.7f * eachWordsFromFirstArticleHeadline.length);
-            // adding plus 2 to the required matching percentage and setting it  as upper limit and
-            // subtracting  2 to the required matching percentage and setting it  as lower limit
-            actualMatchingPercentageLowerLimit = (requiredMatchingPercentage - 2);
-            actualMatchingPercentageUpperLimit = (requiredMatchingPercentage + 2);
+            // adding plus  to the required matching percentage and setting it  as upper limit and
+            // subtracting  3 to the required matching percentage and setting it  as lower limit
+            actualMatchingPercentageLowerLimit = (requiredMatchingPercentage - 3);
+            actualMatchingPercentageUpperLimit = (requiredMatchingPercentage + 3);
             // if count .i.e. matching percentage falls within range then we say the news is valid
             if (count > actualMatchingPercentageLowerLimit && count < actualMatchingPercentageUpperLimit)
                 compareResult = true;

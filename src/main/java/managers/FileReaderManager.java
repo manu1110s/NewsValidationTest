@@ -1,6 +1,6 @@
 package managers;
 
-import dataProvider.ConfigFileReader;
+import dataprovider.ConfigFileReader;
 
 /*The duty of the class is to limit the number of object creation of the ConfigFileReader class */
 public class FileReaderManager {

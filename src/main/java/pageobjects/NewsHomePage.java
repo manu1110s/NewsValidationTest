@@ -1,6 +1,7 @@
-package pageObjects;
+package pageobjects;
 
 import managers.FileReaderManager;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -53,8 +54,11 @@ public class NewsHomePage {
 
     /*This method will perform the click operation on the News pillar on the web page*/
     public void clickOnNews() {
-        //wait.until(ExpectedConditions.elementToBeClickable(pillar_News));
-        pillar_News.click();
+        try {
+            pillar_News.click();
+        } catch (ElementClickInterceptedException exception) {
+            System.out.println(exception.toString());
+        }
     }
 
     /*This method will return the first article from the web page*/
@@ -62,20 +66,36 @@ public class NewsHomePage {
         return container_FirstArticle.get(0).getText();
     }
 
+
     /*This method will switch the control back to parent window*/
     public void switchToHomePage() {
-        driver.switchTo().defaultContent();
+        try {
+            driver.switchTo().defaultContent();
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+
     }
 
     /*This method will launch the Guardian dot com News page*/
     public void navigateToNewsHomePage() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getNewsPageUrl());
-        Wait.untilPageLoadComplete(driver, FileReaderManager.getInstance().getConfigReader().getImplicitWait());
+        try {
+            driver.get(FileReaderManager.getInstance().getConfigReader().getNewsPageUrl());
+            Wait.untilPageLoadComplete(driver, FileReaderManager.getInstance().getConfigReader().getImplicitWait());
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+
     }
 
     /*This method will launch the Google Home page*/
     public void navigateToGoogleHomePage() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getGoogleHomePageUrl());
-        Wait.untilPageLoadComplete(driver, FileReaderManager.getInstance().getConfigReader().getImplicitWait());
+        try {
+            driver.get(FileReaderManager.getInstance().getConfigReader().getGoogleHomePageUrl());
+            Wait.untilPageLoadComplete(driver, FileReaderManager.getInstance().getConfigReader().getImplicitWait());
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-package stepDefinition;
+package stepdefinitions;
 
 import com.cucumber.listener.Reporter;
 import cucumber.api.Scenario;
@@ -12,9 +12,8 @@ import managers.WebDriverManager;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import pageObjects.GoogleSearchPage;
-import pageObjects.NewsHomePage;
+import pageobjects.GoogleSearchPage;
+import pageobjects.NewsHomePage;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 
 public class NewsValidityCheck {
 
-    WebDriverWait wait;
     WebDriver driver;
     NewsHomePage newsHomePage ;
     GoogleSearchPage googleSearchPage;
@@ -36,17 +34,18 @@ public class NewsValidityCheck {
     List<String> allSearchResultsHeadline;
     boolean testResult;
 
-
+    //All the steps inside this method is run before every scenario. driver will launch the browser
     @Before
     public void BeforeSteps() {
         webDriverManager = new WebDriverManager();
         driver = webDriverManager.getDriver();
-        articleHeadline =null;
-        allSearchResultsHeadline =null;
+        articleHeadline = null;
+        allSearchResultsHeadline = null;
     }
 
+    //This method will load the Guardian dot com home page
     @Given("^User is on The Guardian Home Page$")
-    public void user_is_on_The_Guardian_Home_Page() throws InterruptedException {
+    public void userIsOnTheGuardianHomePage() throws InterruptedException {
         pageObjectManager = new PageObjectManager(driver);
         newsHomePage = pageObjectManager.getNewsHomePage();
         newsHomePage.navigateToNewsHomePage();
@@ -55,38 +54,49 @@ public class NewsValidityCheck {
         newsHomePage.switchToHomePage();
     }
 
+    //This method will load the news section of the Guardian dot com website
     @Given("^User Navigates News Section$")
-    public void user_Navigates_News_Section() { newsHomePage.clickOnNews(); }
-
-    @Given("^User Considers first Article Headline$")
-    public void user_Considers_first_Article_Headline(){
-        articleHeadline=newsHomePage.getFirstArticleHeadline();
+    public void userNavigatesNewsSection() {
+        newsHomePage.clickOnNews();
     }
 
-    @Given("^User Navigates to Google Home Page$")
-    public void user_Navigates_to_Google_Home_Page() {newsHomePage.navigateToGoogleHomePage();    }
+    //This method will get the headline of the first article in the Guardian dot com news page
+    @Given("^User Considers first Article Headline$")
+    public void userConsidersFirstArticleHeadline() {
+        articleHeadline = newsHomePage.getFirstArticleHeadline();
+    }
 
+    //This method will launch the Google Home page
+    @Given("^User Navigates to Google Home Page$")
+    public void userNavigateToGoogleHomePage() {
+        newsHomePage.navigateToGoogleHomePage();
+    }
+
+    //This method will search for the article in Google search page
     @When("^User search for Article in Google$")
-    public void user_search_for_Article_in_Google(){
+    public void userSearchForArticleInGoogle() {
         googleSearchPage = pageObjectManager.getGoogleSearchPage();
         googleSearchPage.enterSearchCriteria(articleHeadline);
         googleSearchPage.searchForResults();
     }
 
+    //This method will check if the article exists in the Google search results
     @Then("^User sees article in Search results$")
-    public void user_sees_article_in_Search_results() {
+    public void userSeesArticleInSearchResults() {
         allSearchResultsHeadline = googleSearchPage.getAllResultsHeadline();
         testResult = googleSearchPage.isArticlePresentInSearchEngine(allSearchResultsHeadline, articleHeadline);
         assertTrue(testResult);
     }
 
+    //This method will compare the article headlines with the Google search results and will check for the validity of the news article
     @Then("^User checks for Validity of Article$")
-    public void user_checks_for_Validity_of_Article() {
+    public void userChecksForValidityOfArticle() {
         allSearchResultsHeadline = googleSearchPage.getAllResultsHeadline();
         testResult = googleSearchPage.compareNews(allSearchResultsHeadline, articleHeadline);
         assertTrue(testResult);
     }
 
+    //This method will take screenshots in case of scenario failure and stores it under the cucumber-reports
     @After(order = 1)
     public void afterScenario(Scenario scenario) {
         if (scenario.isFailed()) {
@@ -113,7 +123,7 @@ public class NewsValidityCheck {
     //After each scenario the browser windows are closed and quit
     @After(order = 0)
     public void AfterSteps() {
-       webDriverManager.closeDriver();
+        webDriverManager.closeDriver();
     }
 
 }

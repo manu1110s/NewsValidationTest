@@ -1,4 +1,4 @@
-package dataProvider;
+package dataprovider;
 
 import enums.DriverType;
 
