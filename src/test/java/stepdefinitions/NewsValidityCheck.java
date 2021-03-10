@@ -12,6 +12,7 @@ import managers.WebDriverManager;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pageobjects.GoogleSearchPage;
 import pageobjects.NewsHomePage;
 
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 public class NewsValidityCheck {
 
+    WebDriverWait wait;
     WebDriver driver;
     NewsHomePage newsHomePage ;
     GoogleSearchPage googleSearchPage;
@@ -34,7 +36,7 @@ public class NewsValidityCheck {
     List<String> allSearchResultsHeadline;
     boolean testResult;
 
-    //All the steps inside this method is run before every scenario. driver will launch the browser
+
     @Before
     public void BeforeSteps() {
         webDriverManager = new WebDriverManager();
@@ -43,7 +45,6 @@ public class NewsValidityCheck {
         allSearchResultsHeadline = null;
     }
 
-    //This method will load the Guardian dot com home page
     @Given("^User is on The Guardian Home Page$")
     public void userIsOnTheGuardianHomePage() throws InterruptedException {
         pageObjectManager = new PageObjectManager(driver);
@@ -54,25 +55,21 @@ public class NewsValidityCheck {
         newsHomePage.switchToHomePage();
     }
 
-    //This method will load the news section of the Guardian dot com website
     @Given("^User Navigates News Section$")
     public void userNavigatesNewsSection() {
         newsHomePage.clickOnNews();
     }
 
-    //This method will get the headline of the first article in the Guardian dot com news page
     @Given("^User Considers first Article Headline$")
     public void userConsidersFirstArticleHeadline() {
         articleHeadline = newsHomePage.getFirstArticleHeadline();
     }
 
-    //This method will launch the Google Home page
     @Given("^User Navigates to Google Home Page$")
     public void userNavigateToGoogleHomePage() {
         newsHomePage.navigateToGoogleHomePage();
     }
 
-    //This method will search for the article in Google search page
     @When("^User search for Article in Google$")
     public void userSearchForArticleInGoogle() {
         googleSearchPage = pageObjectManager.getGoogleSearchPage();
@@ -80,7 +77,6 @@ public class NewsValidityCheck {
         googleSearchPage.searchForResults();
     }
 
-    //This method will check if the article exists in the Google search results
     @Then("^User sees article in Search results$")
     public void userSeesArticleInSearchResults() {
         allSearchResultsHeadline = googleSearchPage.getAllResultsHeadline();
@@ -88,7 +84,6 @@ public class NewsValidityCheck {
         assertTrue(testResult);
     }
 
-    //This method will compare the article headlines with the Google search results and will check for the validity of the news article
     @Then("^User checks for Validity of Article$")
     public void userChecksForValidityOfArticle() {
         allSearchResultsHeadline = googleSearchPage.getAllResultsHeadline();
@@ -96,7 +91,6 @@ public class NewsValidityCheck {
         assertTrue(testResult);
     }
 
-    //This method will take screenshots in case of scenario failure and stores it under the cucumber-reports
     @After(order = 1)
     public void afterScenario(Scenario scenario) {
         if (scenario.isFailed()) {
