@@ -36,15 +36,16 @@ public class NewsValidityCheck {
     List<String> allSearchResultsHeadline;
     boolean testResult;
 
-
+    /*Steps in this method will run before every test scenario*/
     @Before
-    public void BeforeSteps() {
+    public void beforeSteps() {
         webDriverManager = new WebDriverManager();
         driver = webDriverManager.getDriver();
         articleHeadline = null;
         allSearchResultsHeadline = null;
     }
 
+    //This method will launch the Guardian dot com home page
     @Given("^User is on The Guardian Home Page$")
     public void userIsOnTheGuardianHomePage() throws InterruptedException {
         pageObjectManager = new PageObjectManager(driver);
@@ -55,21 +56,25 @@ public class NewsValidityCheck {
         newsHomePage.switchToHomePage();
     }
 
+    //This method will launch the news section of the Guardian dot com home page
     @Given("^User Navigates News Section$")
     public void userNavigatesNewsSection() {
         newsHomePage.clickOnNews();
     }
 
+    // This method will get the first article headline
     @Given("^User Considers first Article Headline$")
     public void userConsidersFirstArticleHeadline() {
         articleHeadline = newsHomePage.getFirstArticleHeadline();
     }
 
+    // This method will launch the Google Home page
     @Given("^User Navigates to Google Home Page$")
     public void userNavigateToGoogleHomePage() {
         newsHomePage.navigateToGoogleHomePage();
     }
 
+    // This method will search for the article in Google
     @When("^User search for Article in Google$")
     public void userSearchForArticleInGoogle() {
         googleSearchPage = pageObjectManager.getGoogleSearchPage();
@@ -77,6 +82,7 @@ public class NewsValidityCheck {
         googleSearchPage.searchForResults();
     }
 
+    //This method will check if the article exists in Google search
     @Then("^User sees article in Search results$")
     public void userSeesArticleInSearchResults() {
         allSearchResultsHeadline = googleSearchPage.getAllResultsHeadline();
@@ -84,6 +90,7 @@ public class NewsValidityCheck {
         assertTrue(testResult);
     }
 
+    //This method will check the validity of the news article
     @Then("^User checks for Validity of Article$")
     public void userChecksForValidityOfArticle() {
         allSearchResultsHeadline = googleSearchPage.getAllResultsHeadline();
@@ -91,6 +98,7 @@ public class NewsValidityCheck {
         assertTrue(testResult);
     }
 
+    //This method will capture screenshots in case of failure
     @After(order = 1)
     public void afterScenario(Scenario scenario) {
         if (scenario.isFailed()) {
@@ -116,7 +124,7 @@ public class NewsValidityCheck {
 
     //After each scenario the browser windows are closed and quit
     @After(order = 0)
-    public void AfterSteps() {
+    public void afterSteps() {
         webDriverManager.closeDriver();
     }
 
